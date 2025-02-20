@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_SUBDIRECTORIES 3
+#define MAX_FILES 3
+#define MAX_NAME_LENGTH 50
+struct File {
+    char name[MAX_NAME_LENGTH];
+};
+
+struct SubDirectory {
+    char name[MAX_NAME_LENGTH];
+    struct File files[MAX_FILES];
+    int fileCount;
+};
+struct RootDirectory {
+    struct SubDirectory subDirs[MAX_SUBDIRECTORIES];
+    int subDirCount;
+};
+
+struct RootDirectory rootDirectory;
+void addSubDirectory() {
+    if (rootDirectory.subDirCount < MAX_SUBDIRECTORIES) {
+        printf("Enter the subdirectory name: ");
+        scanf("%s", rootDirectory.subDirs[rootDirectory.subDirCount].name);
+        rootDirectory.subDirs[rootDirectory.subDirCount].fileCount = 0;
+        rootDirectory.subDirCount++;
+        printf("Subdirectory added successfully.\n");
+    } else {
+        printf("Max subdirectories reached!\n");
+    }
+}
+void addFileToSubDirectory() {
+    char subDirName[MAX_NAME_LENGTH];
+    printf("Enter subdirectory name to add a file: ");
+    scanf("%s", subDirName);
+    int subDirIndex = -1;
+    for (int i = 0; i < rootDirectory.subDirCount; i++) {
+        if (strcmp(rootDirectory.subDirs[i].name, subDirName) == 0) {
+            subDirIndex = i;
+            break;
+        }
+    }
+
+    if (subDirIndex == -1) {
+        printf("Subdirectory not found!\n");
+        return;
+    }
+    if (rootDirectory.subDirs[subDirIndex].fileCount < MAX_FILES) {
+        printf("Enter the file name: ");
+        scanf("%s", rootDirectory.subDirs[subDirIndex].files[rootDirectory.subDirs[subDirIndex].fileCount].name);
+        rootDirectory.subDirs[subDirIndex].fileCount++;
+        printf("File added successfully.\n");
+    } else {
+        printf("Max files in subdirectory reached!\n");
+    }
+}
+void displayFilesInSubDirectory() {
+    char subDirName[MAX_NAME_LENGTH];
+    printf("Enter subdirectory name to display files: ");
+    scanf("%s", subDirName);
+
+    int subDirIndex = -1;
+    for (int i = 0; i < rootDirectory.subDirCount; i++) {
+        if (strcmp(rootDirectory.subDirs[i].name, subDirName) == 0) {
+            subDirIndex = i;
+            break;
+        }
+    }
+
+    if (subDirIndex == -1) {
+        printf("Subdirectory not found!\n");
+        return;
+    }
+
+    printf("Files in subdirectory '%s':\n", subDirName);
+    for (int i = 0; i < rootDirectory.subDirs[subDirIndex].fileCount; i++) {
+        printf("%s\n", rootDirectory.subDirs[subDirIndex].files[i].name);
+    }
+}
+
+int main() {
+    rootDirectory.subDirCount = 0;
+
+    int choice;
+    while (1) {
+        printf("\n1. Add Subdirectory\n2. Add File to Subdirectory\n3. Display Files in Subdirectory\n4. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addSubDirectory();
+                break;
+            case 2:
+                addFileToSubDirectory();
+                break;
+            case 3:
+                displayFilesInSubDirectory();
+                break;
+            case 4:
+                return 0;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
