@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void FCFS(int requests[], int n, int initial) {
+    int totalSeekCount = 0;
+    int curTrack;
+    int seekCount;
+    curTrack = initial;
+
+    printf("\nDisk Scheduling using FCFS (First Come First Served):\n");
+    printf("Initial Head Position: %d\n", initial);
+    for (int i = 0; i < n; i++) {
+        seekCount = abs(requests[i] - curTrack);
+        totalSeekCount += seekCount;
+        curTrack = requests[i];
+        printf("Move from %d to %d with seek distance %d\n", curTrack - seekCount, curTrack, seekCount);
+    }
+    printf("\nTotal Seek Count: %d\n", totalSeekCount);
+    printf("Average Seek Time: %.2f\n", (float)totalSeekCount / n);
+}
+
+int main() {
+    int n, initial;
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+    int requests[n];
+    printf("Enter the disk requests (space-separated): ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &requests[i]);
+    }
+    printf("Enter the initial position of the disk head: ");
+    scanf("%d", &initial);
+    FCFS(requests, n, initial);
+
+    return 0;
+}
